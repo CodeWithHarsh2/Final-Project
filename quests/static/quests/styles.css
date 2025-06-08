@@ -1,0 +1,298 @@
+/* body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
+    min-height: 100vh;
+    margin: 0;
+}
+.header {
+    background: #222;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-align: center;
+    letter-spacing: 2px;
+}
+.quest-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(67,198,172,0.2);
+    margin: 1rem auto;
+    max-width: 700px;
+    padding: 2rem;
+    transition: box-shadow 0.3s;
+}
+.quest-card:hover {
+    box-shadow: 0 8px 32px rgba(67,198,172,0.3);
+}
+.challenge-list {
+    list-style: none;
+    padding: 0;
+}
+.challenge-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-left: 6px solid #43c6ac;
+    background: #f4f4f4;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.challenge-item.completed {
+    background: #e0ffe0;
+    border-left: 6px solid #f8ffae;
+    text-decoration: line-through;
+}
+.complete-btn {
+    background: #43c6ac;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.complete-btn:hover {
+    background: #34b3a0;
+}
+#xp-bar-container {
+    width: 100%;
+    background: #ddd;
+    border-radius: 8px;
+    margin: 1rem 0;
+    height: 24px;
+    overflow: hidden;
+}
+#xp-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #43c6ac, #f8ffae);
+    width: 0%;
+    transition: width 0.5s;
+}
+@media (max-width: 600px) {
+    .quest-card {
+        padding: 1rem;
+    }
+    .header {
+        font-size: 1.2rem;
+    }
+}
+.level-badge {
+    display: inline-block;
+    background: #43c6ac;
+    color: #fff;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-right: 1rem;
+    box-shadow: 0 2px 8px rgba(67,198,172,0.2);
+}
+#level-up {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f8ffae;
+    color: #43c6ac;
+    font-size: 2rem;
+    padding: 2rem 3rem;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px rgba(67,198,172,0.3);
+    z-index: 1000;
+    animation: pop 0.5s;
+}
+#level-up.show {
+    display: block;
+}
+@keyframes pop {
+    0% { transform: scale(0.7) translate(-50%, -50%);}
+    60% { transform: scale(1.1) translate(-50%, -50%);}
+    100% { transform: scale(1) translate(-50%, -50%);}
+} */
+
+
+
+
+/* Global styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Header */
+.header {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.header nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 1rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.header nav a:hover {
+    color: #ffd700;
+}
+
+/* Quest Card */
+.quest-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s;
+    color: #222;
+}
+
+.quest-card:hover {
+    transform: scale(1.01);
+}
+
+/* Challenge List */
+.challenge-list {
+    list-style: none;
+    padding: 0;
+}
+
+.challenge-item {
+    background: rgba(255, 255, 255, 0.6);
+    margin: 1rem 0;
+    padding: 1rem 1.5rem;
+    border-left: 5px solid #00c6ff;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.challenge-item:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(5px);
+}
+
+.challenge-item.completed {
+    border-left-color: #8bc34a;
+    background: #eaffea;
+    text-decoration: line-through;
+}
+
+/* Button */
+.complete-btn {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 114, 255, 0.4);
+}
+
+.complete-btn:hover {
+    background: linear-gradient(135deg, #0072ff, #005bea);
+    transform: scale(1.05);
+}
+
+/* XP Progress Bar */
+#xp-bar-container {
+    width: 100%;
+    background: rgba(255,255,255,0.3);
+    height: 24px;
+    border-radius: 12px;
+    margin: 2rem 0;
+    overflow: hidden;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+}
+
+#xp-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00c6ff, #f77062);
+    transition: width 0.5s ease-in-out;
+}
+
+/* Level Badge */
+.level-badge {
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(255, 118, 145, 0.4);
+    margin-right: 1rem;
+}
+
+/* Level-Up Popup */
+#level-up {
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border: 3px solid #00c6ff;
+    border-radius: 2rem;
+    padding: 2rem 3rem;
+    color: #0072ff;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    animation: pop 0.5s ease-out;
+}
+
+#level-up.show {
+    display: block;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.7) translate(-50%, -50%); }
+    60% { transform: scale(1.1) translate(-50%, -50%); }
+    100% { transform: scale(1) translate(-50%, -50%); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .quest-card {
+        padding: 1rem;
+    }
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    .header nav a {
+        font-size: 0.9rem;
+    }
+}

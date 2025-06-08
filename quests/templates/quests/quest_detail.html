@@ -1,0 +1,26 @@
+
+{% extends 'quests/base.html' %}
+{% load get_item static %}
+{% block content %}
+<div class="quest-card">
+    <h1>{{ quest.title }}</h1>
+    {% if quest.image %}
+        <img src="{{ quest.image.url }}" alt="" style="max-width:100%;border-radius:12px;">
+    {% endif %}
+    <p>{{ quest.description }}</p>
+    <h2>Challenges</h2>
+    <ul class="challenge-list">
+        {% for challenge in challenges %}
+            <li class="challenge-item {% if user_progress|get_item:challenge.id and user_progress|get_item:challenge.id.completed %}completed{% endif %}" id="challenge-{{ challenge.id }}">
+                <span>{{ challenge.title }}</span>
+                {% if not user_progress|get_item:challenge.id or not user_progress|get_item:challenge.id.completed %}
+                    <button class="complete-btn" data-challenge-id="{{ challenge.id }}">Complete</button>
+                {% else %}
+                    <span>Completed!</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<script src="{% static 'quests/main.js' %}"></script>
+{% endblock %}

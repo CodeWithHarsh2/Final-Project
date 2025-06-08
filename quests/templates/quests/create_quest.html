@@ -1,0 +1,21 @@
+
+{% extends 'quests/base.html' %}
+{% block content %}
+<div class="quest-card">
+    <h2>Create a New Quest</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h3>Add Challenges</h3>
+        {% for i in "12345" %}
+            <p>
+                <label for="challenge_title_{{ i }}">Title {{ i }}:</label>
+                <input type="text" name="challenge_title_{{ i }}" id="challenge_title_{{ i }}">
+                <label for="challenge_desc_{{ i }}">Description:</label>
+                <input type="text" name="challenge_desc_{{ i }}" id="challenge_desc_{{ i }}">
+            </p>
+        {% endfor %}
+        <button type="submit">Create Quest</button>
+    </form>
+</div>
+{% endblock %}

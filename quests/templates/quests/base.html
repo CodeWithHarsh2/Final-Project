@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SkillQuest</title>
+    <link rel="stylesheet" href="{% static 'quests/styles.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h1>SkillQuest</h1>
+        <nav>
+            <a href="{% url 'quest_list' %}">All Quests</a> |
+            <a href="{% url 'dashboard' %}">Dashboard</a> |
+            <a href="{% url 'create_quest' %}">Create Quest</a>
+        </nav>
+    </div>
+    {% for badge in badges %}
+    {% if badge.icon %}
+        <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
+    {% else %}
+        <img src="{% static 'images/default_badge.png' %}" alt="No badge icon" width="48" />
+    {% endif %}
+    {% empty %}
+        <span>No badges yet. Complete more quests!</span>
+    {% endfor %}
+{% if user.is_staff %}
+    <a href="{% url 'create_badge' %}">Add Badge</a>
+{% endif %}
+
+
+    {% block content %}{% endblock %}
+</body>
+</html>
