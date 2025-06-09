@@ -228,7 +228,7 @@ body::after {
 /* Submit Button */
 .quest-card button[type="submit"] {
   margin-top: 1.2rem;
-  padding: 1rem 2.5rem;
+  padding: 1rem 1.5rem;
   font-size: 1.13rem;
   font-weight: 700;
   border-radius: 9px;
@@ -491,7 +491,7 @@ body::after {
 .challenges-list {
   display: flex;
   flex-direction: column;
-  gap: 1.3rem; /* SPACE between cards */
+  gap: 1rem; /* SPACE between cards */
   align-items: center;
 }
 
@@ -499,7 +499,7 @@ body::after {
   background: rgba(255,255,255,0.13);
   border-radius: 14px;
   padding: 1.2rem 2.2rem;
-  min-width: 260px;
+  min-width: 900px;
   max-width: 480px;
   width: 100%;
   box-shadow: 0 4px 18px rgba(0,0,0,0.13);
@@ -539,18 +539,18 @@ body::after {
   height: 20px;
   border-radius: 15px;
   overflow: hidden;
-  margin: 1.2rem 0;
+  margin: 2rem 0;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 350px;
+  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
 }
 
 #xp-bar {
-  height: 100%;
+  height: 50%;
   background: linear-gradient(to right, #ffd740, #ffb300);
-  border-radius: 15px;
+  border-radius: 10px;
   transition: width 0.6s ease-in-out;
 }
 
@@ -606,13 +606,13 @@ body::after {
 .level-badge {
   display: block;
   position: fixed;
-  top: 34%;
+  top: 36%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -140%);
   font-size: 0.9rem;
   font-weight: 700;
   color: #ffd740;
-  padding: 0.8rem 1.2rem;
+  padding: 0.3rem 1.2rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 10000;
@@ -888,8 +888,7 @@ ol {
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
-.custom-login-btn:hover,
-.custom-login-btn:focus {
+.custom-login-btn:hover, .custom-login-btn:focus {
   background: linear-gradient(90deg, #ffd740 0%, #ffb300 100%);
   color: #000;
   transform: scale(1.04);
@@ -911,3 +910,43 @@ ol {
 .custom-login-links a:hover {
   text-decoration: underline;
 }
+
+.register-center-container {
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none; /* Keep your background as is */
+}
+
+.register-box {
+  background: rgba(30, 30, 38, 0.95);
+  padding: 2.5rem 2.2rem 2rem 2.2rem;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  width: fit-content;
+  max-width: 90vw;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  margin: 0 auto;
+}
+
+.quest-description {
+  color: #ffd740;
+  font-size: 1.1rem;
+  margin: 1rem 0 1.5rem 0;
+  line-height: 1.6;
+  white-space: pre-line; /* preserves line breaks */
+}
+
+.challenge-description {
+  color: #ffd740;
+  font-size: 1.02rem;
+  margin: 0.3rem 0 0.7rem 0;
+  line-height: 1.5;
+}
+
+
+

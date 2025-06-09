@@ -1,0 +1,25 @@
+{% extends "quests/base.html" %}
+{% block content %}
+  <div class="register-center-container">
+    <div class="register-box">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <form method="post" class="login-form">
+        <h2>Register</h2>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="login-btn">Register</button>
+        <div class="login-links">
+          <a href="{% url 'login' %}">Already have an account? Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

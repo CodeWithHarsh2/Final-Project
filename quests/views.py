@@ -6,6 +6,11 @@ from .models import Quest, Challenge, Progress, Badge, UserProfile
 from .forms import QuestForm
 from django.utils import timezone
 from .forms import BadgeForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.contrib import messages
+
+
 
 
 def quest_list(request):
@@ -71,6 +76,19 @@ def complete_challenge(request, challenge_id):
         return JsonResponse({'success': True, 'level': user_profile.level, 'xp': user_profile.xp})
     return JsonResponse({'success': False})
 
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Account created successfully! You are now logged in.")
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = UserCreationForm()
+    return render(request, "registration/register.html", {"form": form})
 @login_required
 def create_quest(request):
     if request.method == 'POST':

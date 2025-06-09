@@ -1,33 +1,41 @@
-
 {% extends 'quests/base.html' %}
 {% load get_item static %}
 {% block content %}
 <div class="main-container">
-<div class="quest-card">
+  <div class="quest-card">
     <h1>{{ quest.title }}</h1>
     {% if quest.image %}
-        <img src="{{ quest.image.url }}" alt="" style="max-width:100%;border-radius:12px;">
+      <img src="{{ quest.image.url }}" alt="" style="max-width:100%;border-radius:12px;">
     {% endif %}
- <div class="challenges-section">
-  <h3 class="challenges-heading">Challenges</h3>
-  <div class="challenges-list">
-    {% for challenge in challenges %}
-      <div class="challenge-card{% if challenge.completed %} completed{% endif %}" id="challenge-{{ challenge.id }}">
-        <div class="challenge-title">{{ challenge.title }}</div>
-        {% if challenge.completed %}
-          <span class="challenge-status">Completed</span>
-        {% else %}
-          <form class="complete-form" data-id="{{ challenge.id }}" method="post" action="{% url 'complete_challenge' challenge.id %}">
-            {% csrf_token %}
-            <button class="complete-btn" type="submit">Complete</button>
-          </form>
-        {% endif %}
+
+    <!-- Quest description added here -->
+    {% if quest.description %}
+      <div class="quest-description">
+        {{ quest.description }}
       </div>
-    {% endfor %}
+    {% endif %}
+
+    <div class="challenges-section">
+      <h3 class="challenges-heading">Challenges</h3>
+      <div class="challenges-list">
+        {% for challenge in challenges %}
+  <div class="challenge-card{% if challenge.completed %} completed{% endif %}" id="challenge-{{ challenge.id }}">
+    <div class="challenge-title">{{ challenge.title }}</div>
+    <div class="challenge-description">{{ challenge.description }}</div>
+    {% if challenge.completed %}
+      <span class="challenge-status">Completed</span>
+    {% else %}
+      <form class="complete-form" data-id="{{ challenge.id }}" method="post" action="{% url 'complete_challenge' challenge.id %}">
+        {% csrf_token %}
+        <button class="complete-btn" type="submit">Complete</button>
+      </form>
+    {% endif %}
   </div>
-</div>
+{% endfor %}
 
-
+      </div>
+    </div>
+  </div>
 </div>
 <script src="{% static 'quests/main.js' %}"></script>
 {% endblock %}
