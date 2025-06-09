@@ -6,6 +6,9 @@ class QuestForm(forms.ModelForm):
     class Meta:
         model = Quest
         fields = ['title', 'description', 'image']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 2, 'style': 'resize:none;'}),
+        }
 
 class BadgeForm(forms.ModelForm):
     class Meta:

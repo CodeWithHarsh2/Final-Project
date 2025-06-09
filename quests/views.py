@@ -1,3 +1,4 @@
+from guest_user.decorators import allow_guest_user
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -5,6 +6,7 @@ from .models import Quest, Challenge, Progress, Badge, UserProfile
 from .forms import QuestForm
 from django.utils import timezone
 from .forms import BadgeForm
+
 
 def quest_list(request):
     quests = Quest.objects.all().order_by('-created_at')
@@ -21,9 +23,10 @@ def dashboard(request):
         'progresses': progresses,
         'badges': badges,
         'quests': quests,
+        'show_badge_message': False,  # <--- Add this line
     })
 
-@login_required
+@allow_guest_user
 def quest_detail(request, quest_id):
     quest = get_object_or_404(Quest, id=quest_id)
     challenges = quest.challenges.order_by('order')
@@ -32,9 +35,10 @@ def quest_detail(request, quest_id):
         'quest': quest,
         'challenges': challenges,
         'user_progress': user_progress,
+        'show_badge_message': False,  # <--- Add this line
     })
 
-@login_required
+@allow_guest_user
 def complete_challenge(request):
     if request.method == 'POST':
         challenge_id = request.POST.get('challenge_id')
@@ -72,7 +76,11 @@ def create_quest(request):
             return redirect('quest_detail', quest_id=quest.id)
     else:
         form = QuestForm()
-    return render(request, 'quests/create_quest.html', {'form': form})
+    
+    return render(request, 'quests/create_quest.html', {
+        'form': form,
+        'show_badge_message': True,  # <-- Add this line
+    })
 
 def create_badge(request):
     if not request.user.is_staff:
@@ -94,3 +102,6 @@ def delete_quest(request, quest_id):
         quest.delete()
         return redirect('dashboard')
     return render(request, 'quests/confirm_delete_quest.html', {'quest': quest})
+
+def create_quest_view(request):
+    return render(request, 'skillsquest/create_quest.html')

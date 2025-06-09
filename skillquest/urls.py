@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('quests.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path("convert/", include("guest_user.urls")),
 ]
 
 if settings.DEBUG:

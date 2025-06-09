@@ -2,6 +2,7 @@
 {% extends 'quests/base.html' %}
 {% load static %}
 {% block content %}
+<div class="main-container">
 <div class="quest-card">
     <div class="header">Welcome, {{ user_profile.user.username }}!</div>
     <div>
@@ -22,18 +23,20 @@
     <h2>Your Badges</h2>
     <div>
        {% for badge in badges %}
-    {% if badge.icon %}
-        <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
-    {% elif badge.icon_url %}
-        <img src="{{ badge.icon_url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
-    {% else %}
-        <img src="{% static 'images/default_badge.png' %}" alt="No badge icon" width="48" />
-    {% endif %}
-{% empty %}
-    <span>No badges yet. Complete more quests!</span>
+        {% if badge.icon %}
+            <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
+        {% elif badge.icon_url %}
+            <img src="{{ badge.icon_url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
+        
+        {% endif %}
+    {% empty %}
+        {% if show_badge_message %}
+            <span>No badges yet. Complete more quests! Add Badge</span>
+        {% endif %}
 {% endfor %}
 
     </div>
+</div>
   
 <ul>
 {% for quest in quests %}

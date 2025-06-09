@@ -5,29 +5,49 @@
 <head>
     <meta charset="UTF-8">
     <title>SkillQuest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'quests/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 <body>
-    <div class="header">
-        <h1>SkillQuest</h1>
-        <nav>
-            <a href="{% url 'quest_list' %}">All Quests</a> |
-            <a href="{% url 'dashboard' %}">Dashboard</a> |
-            <a href="{% url 'create_quest' %}">Create Quest</a>
-        </nav>
-    </div>
-    {% for badge in badges %}
-    {% if badge.icon %}
-        <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
+   <div class="header">
+    <h1>SkillQuest</h1>
+    <nav>
+        <a href="{% url 'quest_list' %}">All Quests</a> |
+        <a href="{% url 'dashboard' %}">Dashboard</a> |
+        <a href="{% url 'create_quest' %}">Create Quest</a>
+    </nav>
+    <div class="user-info">
+    {% if user.is_authenticated %}
+        <span>Hi, {{ user.username }}!</span>
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
     {% else %}
-        <img src="{% static 'images/default_badge.png' %}" alt="No badge icon" width="48" />
+        <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
     {% endif %}
-    {% empty %}
-        <span>No badges yet. Complete more quests!</span>
-    {% endfor %}
-{% if user.is_staff %}
-    <a href="{% url 'create_badge' %}">Add Badge</a>
-{% endif %}
+</div>
+
+</div>
+
+
+<div class="badges-section" style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.5rem;">
+    {% if badges %}
+        {% for badge in badges %}
+            {% if badge.icon %}
+                <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
+           
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <span style="color: #fff; font-size: 1.1rem;">No badges yet. Complete more quests!</span>
+    {% endif %}
+    {% if user.is_authenticated and user.username == "admin" %}
+        <a href="{% url 'create_badge' %}" style="margin-left: 1.5rem; color: #ffd740; font-weight: 600;">Add Badge</a>
+    {% endif %}
+</div>
 
 
     {% block content %}{% endblock %}

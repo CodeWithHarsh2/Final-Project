@@ -2,6 +2,7 @@
 {% extends 'quests/base.html' %}
 {% load get_item static %}
 {% block content %}
+<div class="main-container">
 <div class="quest-card">
     <h1>{{ quest.title }}</h1>
     {% if quest.image %}
@@ -14,13 +15,14 @@
             <li class="challenge-item {% if user_progress|get_item:challenge.id and user_progress|get_item:challenge.id.completed %}completed{% endif %}" id="challenge-{{ challenge.id }}">
                 <span>{{ challenge.title }}</span>
                 {% if not user_progress|get_item:challenge.id or not user_progress|get_item:challenge.id.completed %}
-                    <button class="complete-btn" data-challenge-id="{{ challenge.id }}">Complete</button>
+                    <button class="glow-btn" data-challenge-id="{{ challenge.id }}">Complete</button>
                 {% else %}
                     <span>Completed!</span>
                 {% endif %}
             </li>
         {% endfor %}
     </ul>
+</div>
 </div>
 <script src="{% static 'quests/main.js' %}"></script>
 {% endblock %}
