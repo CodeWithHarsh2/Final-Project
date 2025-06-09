@@ -12,6 +12,8 @@ urlpatterns = [
     path('delete-quest/<int:quest_id>/', views.delete_quest, name='delete_quest'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('complete_challenge/<int:challenge_id>/', views.complete_challenge, name='complete_challenge'),
+
     
 
 ]

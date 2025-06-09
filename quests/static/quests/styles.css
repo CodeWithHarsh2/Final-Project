@@ -1,3 +1,4 @@
+
 body {
   background: linear-gradient(120deg, #232526 0%, #485563 100%);
   min-height: 100vh;
@@ -473,4 +474,440 @@ body::after {
 
 .image-preview-container img:hover {
   transform: scale(1.05);
+}
+.challenges-section {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.challenges-heading {
+  color: #ffd740;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.challenges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem; /* SPACE between cards */
+  align-items: center;
+}
+
+.challenge-card {
+  background: rgba(255,255,255,0.13);
+  border-radius: 14px;
+  padding: 1.2rem 2.2rem;
+  min-width: 260px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+  border: 1.5px solid #ffd74044;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.08rem;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.challenge-card.completed {
+  background: #e7ffe7;
+  color: #333;
+  border-left: 5px solid #8bc34a;
+  text-decoration: line-through;
+}
+
+.challenge-title {
+  font-weight: 600;
+  color: #ffd740;
+  text-align: left;
+}
+
+.challenge-status {
+  background: linear-gradient(90deg, #ffd740 0%, #ffb300 100%);
+  color: #232526;
+  font-size: 0.97rem;
+  padding: 0.3rem 1rem;
+  border-radius: 16px;
+  font-weight: 600;
+  margin-left: 1rem;
+  box-shadow: 0 1px 4px #ffd74044;
+}
+#xp-bar-container {
+  background: rgba(255, 255, 255, 0.1);
+  height: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 1.2rem 0;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#xp-bar {
+  height: 100%;
+  background: linear-gradient(to right, #ffd740, #ffb300);
+  border-radius: 15px;
+  transition: width 0.6s ease-in-out;
+}
+
+.quest-list-item {
+  list-style: disc;
+  margin: 0.8rem 0;
+}
+
+.quest-link {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgb(0, 174, 255); /* Good blue for visibility */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.quest-link:hover,
+.quest-link:focus {
+  color: white;
+  text-decoration: underline;
+}
+
+.quest-card ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.quest-card ul li {
+  margin-bottom: 0.8rem;
+  font-size: 1.15rem;
+  color:gold; /* A nice blue color for quest titles */
+}
+
+.quest-card ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.quest-card ul li a:hover {
+  color: gold;
+  text-decoration: underline;
+}
+
+.quest-card ul li span {
+  color: greenyellow;      /* Gold accent for visibility */
+  font-size: 1.2rem;
+  margin-left: 0.8rem;
+  font-weight: 1000;
+}
+
+.level-badge {
+  display: block;
+  position: fixed;
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffd740;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  text-align: center;
+}
+
+ol {
+  list-style-type: decimal;
+  padding-left: 2rem;
+ 
+  align-items: center;
+  
+}
+
+.quest-list-item {
+  list-style-type: decimal;
+  margin: 0.8rem 0;
+  align-items: center;
+
+ 
+
+}
+.quest-flex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+
+
+/* CSS */
+.button-56 {
+  align-items: center;
+  background-color: #fee6e3;
+  border: 2px solid #111;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  height: 30px;
+  justify-content: center;
+  line-height: 24px;
+  max-width: 50%;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-left: 0.7rem;
+}
+
+.button-56:after {
+  background-color: #111;
+  border-radius: 8px;
+  content: "";
+  display: block;
+  height: 30px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  transform: translate(8px, 8px);
+  transition: transform .2s ease-out;
+  z-index: -1;
+}
+
+.button-56:hover:after {
+  transform: translate(0, 0);
+  
+  
+}
+
+.button-56:active {
+  background-color: #ffdeda;
+  outline: 0;
+ 
+}
+
+.button-56:hover {
+  outline: 0;
+  background-color: red;
+}
+
+@media (min-width: 768px) {
+  .button-56 {
+    padding: 0 40px;
+  }
+}
+
+
+
+/* CSS */
+.button-82-pushable {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-82-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: hsl(0deg 0% 0% / 0.25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+.button-82-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(
+    to left,
+    hsl(340deg 100% 16%) 0%,
+    hsl(340deg 100% 32%) 8%,
+    hsl(340deg 100% 32%) 92%,
+    hsl(340deg 100% 16%) 100%
+  );
+}
+
+.button-82-front {
+  display: block;
+  position: relative;
+  padding: 12px 27px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: white;
+  background: hsl(345deg 100% 47%);
+  will-change: transform;
+  transform: translateY(-4px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+@media (min-width: 768px) {
+  .button-82-front {
+    font-size: 1.25rem;
+    padding: 12px 42px;
+  }
+}
+
+.button-82-pushable:hover {
+  filter: brightness(110%);
+  -webkit-filter: brightness(110%);
+}
+
+.button-82-pushable:hover .button-82-front {
+  transform: translateY(-6px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.button-82-pushable:active .button-82-front {
+  transform: translateY(-2px);
+  transition: transform 34ms;
+}
+
+.button-82-pushable:hover .button-82-shadow {
+  transform: translateY(4px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.button-82-pushable:active .button-82-shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+
+.button-82-pushable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Modern Login Form Styling */
+.custom-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  width: 100vw;
+}
+
+.custom-login-form {
+  background: rgba(30, 30, 38, 0.95);
+  padding: 2.2rem 2rem 2rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  min-width: 320px;
+  max-width: 360px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  z-index: 1;
+}
+
+.custom-login-form h2 {
+  text-align: center;
+  color: #ffd740;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  letter-spacing: 1px;
+}
+
+.custom-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.custom-input-group label {
+  color: #ffe082;
+  font-size: 1.05rem;
+  margin-bottom: 0.1rem;
+  font-weight: 500;
+}
+
+.custom-input-group input {
+  border-radius: 7px;
+  border: 1.5px solid #ffd740;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  padding: 0.8rem 1rem;
+  font-size: 1.05rem;
+  transition: border 0.2s, background 0.2s;
+}
+
+.custom-input-group input:focus {
+  border: 2px solid #ffb300;
+  background: #fffde7;
+  color: #232526;
+  outline: none;
+}
+
+.custom-login-btn {
+  background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%);
+  color: #232526;
+  border: none;
+  border-radius: 7px;
+  padding: 0.9rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 0.7rem;
+  box-shadow: 0 2px 12px #ffb30033;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.custom-login-btn:hover,
+.custom-login-btn:focus {
+  background: linear-gradient(90deg, #ffd740 0%, #ffb300 100%);
+  color: #000;
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px #ffd74044;
+}
+
+.custom-login-links {
+  text-align: center;
+  margin-top: 0.6rem;
+}
+
+.custom-login-links a {
+  color: #ffd740;
+  text-decoration: none;
+  font-size: 0.98rem;
+  transition: text-decoration 0.2s;
+}
+
+.custom-login-links a:hover {
+  text-decoration: underline;
 }

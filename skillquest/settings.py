@@ -81,3 +81,4 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "guest_user.backends.GuestBackend",  # This should be last
 ]
+LOGIN_REDIRECT_URL = '/dashboard/'  # or '/' or any valid URL in your project

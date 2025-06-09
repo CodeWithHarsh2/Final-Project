@@ -8,7 +8,7 @@
         {% for quest in quests %}
             <li>
                 <a href="{% url 'quest_detail' quest.id %}">{{ quest.title }}</a>
-                <span>by {{ quest.creator.username }}</span>
+                <span> - by {{ quest.creator.username }}</span>
             </li>
         {% endfor %}
     </ul>

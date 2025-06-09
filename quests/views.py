@@ -12,19 +12,30 @@ def quest_list(request):
     quests = Quest.objects.all().order_by('-created_at')
     return render(request, 'quests/quest_list.html', {'quests': quests})
 
+
+
 @login_required
 def dashboard(request):
     user_profile = UserProfile.objects.get(user=request.user)
     progresses = Progress.objects.filter(user=request.user, completed=True)
     badges = Badge.objects.filter(xp_required__lte=user_profile.xp)
     quests = Quest.objects.filter(challenges__progress__user=request.user).distinct()
+    
+    # XP percent for progress bar (assumes 100 XP per level)
+    xp_percent = int((user_profile.xp / 100) * 100) if user_profile.xp <= 100 else 100
+
+    # Show badge message if no badges
+    show_badge_message = not badges.exists()
+
     return render(request, 'quests/dashboard.html', {
         'user_profile': user_profile,
         'progresses': progresses,
         'badges': badges,
         'quests': quests,
-        'show_badge_message': False,  # <--- Add this line
+        'show_badge_message': show_badge_message,
+        'xp_percent': xp_percent,
     })
+
 
 @allow_guest_user
 def quest_detail(request, quest_id):
@@ -39,9 +50,9 @@ def quest_detail(request, quest_id):
     })
 
 @allow_guest_user
-def complete_challenge(request):
+def complete_challenge(request, challenge_id):
     if request.method == 'POST':
-        challenge_id = request.POST.get('challenge_id')
+        # Use challenge_id from the URL, not from POST data
         note = request.POST.get('note', '')
         challenge = get_object_or_404(Challenge, id=challenge_id)
         progress, created = Progress.objects.get_or_create(user=request.user, challenge=challenge)

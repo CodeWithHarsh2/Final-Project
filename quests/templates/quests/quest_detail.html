@@ -8,21 +8,26 @@
     {% if quest.image %}
         <img src="{{ quest.image.url }}" alt="" style="max-width:100%;border-radius:12px;">
     {% endif %}
-    <p>{{ quest.description }}</p>
-    <h2>Challenges</h2>
-    <ul class="challenge-list">
-        {% for challenge in challenges %}
-            <li class="challenge-item {% if user_progress|get_item:challenge.id and user_progress|get_item:challenge.id.completed %}completed{% endif %}" id="challenge-{{ challenge.id }}">
-                <span>{{ challenge.title }}</span>
-                {% if not user_progress|get_item:challenge.id or not user_progress|get_item:challenge.id.completed %}
-                    <button class="glow-btn" data-challenge-id="{{ challenge.id }}">Complete</button>
-                {% else %}
-                    <span>Completed!</span>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+ <div class="challenges-section">
+  <h3 class="challenges-heading">Challenges</h3>
+  <div class="challenges-list">
+    {% for challenge in challenges %}
+      <div class="challenge-card{% if challenge.completed %} completed{% endif %}" id="challenge-{{ challenge.id }}">
+        <div class="challenge-title">{{ challenge.title }}</div>
+        {% if challenge.completed %}
+          <span class="challenge-status">Completed</span>
+        {% else %}
+          <form class="complete-form" data-id="{{ challenge.id }}" method="post" action="{% url 'complete_challenge' challenge.id %}">
+            {% csrf_token %}
+            <button class="complete-btn" type="submit">Complete</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
 </div>
+
+
 </div>
 <script src="{% static 'quests/main.js' %}"></script>
 {% endblock %}

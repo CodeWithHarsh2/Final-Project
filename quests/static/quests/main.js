@@ -1,45 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.complete-btn').forEach(btn => {
-        btn.onclick = function() {
-            const challengeId = this.dataset.challengeId;
+    document.querySelectorAll('.complete-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const challengeId = this.dataset.id;
             const note = prompt("Add a note about your completion (optional):");
-            fetch('/complete_challenge/', {
+            const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+            fetch(`/complete_challenge/${challengeId}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCookie('csrftoken')
+                    'X-CSRFToken': csrfToken,
                 },
-                body: `challenge_id=${challengeId}&note=${encodeURIComponent(note)}`
+                body: `note=${encodeURIComponent(note)}`
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById(`challenge-${challengeId}`).classList.add('completed');
-                    document.getElementById('xp-bar').style.width = `${data.xp}%`;
-                    document.getElementById('level').innerText = `Level: ${data.level}`;
-                    if (data.xp === 0) {
-                        document.getElementById('level-up').classList.add('show');
-                        setTimeout(() => {
-                            document.getElementById('level-up').classList.remove('show');
-                        }, 2000);
-                    }
+                    const card = document.getElementById(`challenge-${challengeId}`);
+                    card.classList.add('completed');
+                    form.outerHTML = '<span class="challenge-status">Completed</span>';
                 }
             });
-        };
+        });
     });
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
 });
