@@ -1,0 +1,26 @@
+{% extends 'quests/base.html' %}
+{% block content %}
+<div class="main-container">
+  <div class="quest-card">
+    <h2 style="text-align:center; color:#ffd740;">Leaderboard</h2>
+    <table style="width:100%; margin-top:2rem; border-radius:10px; background:#222; color:#ffd740;">
+      <thead>
+        <tr>
+          <th style="padding:10px;">Rank</th>
+          <th style="padding:10px;">User</th>
+          <th style="padding:10px;">XP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr {% if user.user == request.user %}style="background:#333;"{% endif %}>
+          <td style="text-align:center;">{{ forloop.counter }}</td>
+          <td style="text-align:center;">{{ user.user.username }}</td>
+          <td style="text-align:center;">{{ user.xp }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

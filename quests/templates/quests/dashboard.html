@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
     {% else %}
         <span style="color: #fff; font-size: 1.1rem;">No badges yet. Complete more quests!</span>
     {% endif %}
-    {% if user.is_authenticated and user.username == "admin" %}
+    {% if user.is_authenticated and user.username == "Harsh" %}
         <a href="{% url 'create_badge' %}" style="margin-left: 1.5rem; color: #ffd740; font-weight: 600;">Add Badge</a>
     {% endif %}
    </div>
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
         {% endif %}
     {% empty %}
         {% if show_badge_message %}
-            <span>No badges yet. Complete more quests! Add Badge</span>
+            <span>No badges yet. Complete more quests!</span>
         {% endif %}
 {% endfor %}
 

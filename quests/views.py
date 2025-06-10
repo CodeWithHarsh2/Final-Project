@@ -9,7 +9,9 @@ from .forms import BadgeForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import UserProfile, Progress, Badge, Quest
 
 
 
@@ -19,9 +21,8 @@ def quest_list(request):
 
 
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from .models import UserProfile, Progress, Badge, Quest
+
+
 
 @login_required
 def dashboard(request):
@@ -63,6 +64,10 @@ def quest_detail(request, quest_id):
         'user_progress': user_progress,
         'show_badge_message': False,  # <--- Add this line
     })
+def leaderboard(request):
+    # Top 10 users by XP
+    users = UserProfile.objects.order_by('-xp')[:10]
+    return render(request, 'quests/leaderboard.html', {'users': users})
 
 @allow_guest_user
 def complete_challenge(request, challenge_id):
@@ -118,7 +123,7 @@ def register(request):
 
 @login_required
 def create_quest(request):
-    if request.user.username != "harsh":
+    if request.user.username != "Harsh":
         return render(request, 'quests/access_denied.html')
     
     if request.method == 'POST':
@@ -142,19 +147,6 @@ def create_quest(request):
     })
 
     
-# Custom login view
-# def custom_login(request):
-#     if request.method == "POST":
-#         form = AuthenticationForm(request, data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             # Set session variable to trigger instructions popup
-#             request.session['show_instructions'] = True
-#             return redirect('dashboard')
-#     else:
-#         form = AuthenticationForm()
-#     return render(request, "registration/login.html", {"form": form})
 def custom_login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)

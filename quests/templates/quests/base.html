@@ -16,9 +16,10 @@
    <div class="header">
     <h1>SkillSaga</h1>
     <nav>
-        <a href="{% url 'quest_list' %}">All Quests</a> |
-        <a href="{% url 'dashboard' %}">Dashboard</a> |
+        <a href="{% url 'quest_list' %}">All Quests</a> 
+        <a href="{% url 'dashboard' %}">Dashboard</a> 
         <a href="{% url 'create_quest' %}">Create Quest</a>
+        <a href="{% url 'leaderboard' %}">Leaderboard</a>
     </nav>
     <div class="user-info">
     {% if user.is_authenticated %}

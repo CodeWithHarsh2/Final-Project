@@ -7,8 +7,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     level = models.IntegerField(default=1)
     xp = models.IntegerField(default=0)
-    avatar = models.ImageField(upload_to='avatars/', default='avatars/default.png')
-
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)    
+    friends = models.ManyToManyField('self', blank=True)
+    
+    
     def __str__(self):
         return self.user.username
 

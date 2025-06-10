@@ -58,7 +58,7 @@ body::after {
 .header nav {
   margin-top: 1rem;
   display: inline-flex;
-  gap: 24px;
+  gap: 20px;
 }
 
 .header nav a {
@@ -426,7 +426,7 @@ body::after {
   margin-left: 0.5rem;
   background: none;
   border: none;
-  color: #00f;
+  color: rgb(223, 109, 252);
   cursor: pointer;
 }
 
@@ -606,9 +606,8 @@ body::after {
 .level-badge {
   display: block;
   position: fixed;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 25%;
+  left: 38%;
   font-size: 0.9rem;
   font-weight: 700;
   color: #ffd740;
