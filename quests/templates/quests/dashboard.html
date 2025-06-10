@@ -2,6 +2,20 @@
 {% extends 'quests/base.html' %}
 {% load static %}
 {% block content %}
+   <div class="badges-section" style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.5rem;">
+    {% if badges %}
+        {% for badge in badges %}
+            {% if badge.icon %}
+                <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <span style="color: #fff; font-size: 1.1rem;">No badges yet. Complete more quests!</span>
+    {% endif %}
+    {% if user.is_authenticated and user.username == "admin" %}
+        <a href="{% url 'create_badge' %}" style="margin-left: 1.5rem; color: #ffd740; font-weight: 600;">Add Badge</a>
+    {% endif %}
+   </div>
 <div class="main-container">
 <div class="quest-card">
     <div class="header">Welcome, {{ user_profile.user.username }}!</div>

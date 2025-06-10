@@ -1,26 +1,36 @@
 {% extends 'quests/base.html' %}
 {% block content %}
 <div class="main-container">
-<div class="quest-card">
-    <h2>Create a New Quest</h2>
-    <form method="post" enctype="multipart/form-data">
+  <div class="quest-card">
+    {% if user.username == "harsh" %}
+      <h2>Create a New Quest</h2>
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <h3>Add Challenges</h3>
         <div class="challenge-group">
-            {% for i in "12345" %}
-            <div class="challenge-box">
-                <label for="challenge_title_{{ i }}">Challenge Title {{ i }}</label>
-                <input type="text" name="challenge_title_{{ i }}" id="challenge_title_{{ i }}" placeholder="Enter challenge title {{ i }}">
-                <label for="challenge_desc_{{ i }}">Description</label>
-                <textarea name="challenge_desc_{{ i }}" id="challenge_desc_{{ i }}" placeholder="Enter description {{ i }}"></textarea>
-            </div>
-            {% endfor %}
+          {% for i in "12345" %}
+          <div class="challenge-box">
+              <label for="challenge_title_{{ i }}">Challenge Title {{ i }}</label>
+              <input type="text" name="challenge_title_{{ i }}" id="challenge_title_{{ i }}" placeholder="Enter challenge title {{ i }}">
+              <label for="challenge_desc_{{ i }}">Description</label>
+              <textarea name="challenge_desc_{{ i }}" id="challenge_desc_{{ i }}" placeholder="Enter description {{ i }}"></textarea>
+          </div>
+          {% endfor %}
         </div>
         <button type="submit">Create Quest</button>
-    </form>
+      </form>
+    {% else %}
+<div class="unauthorized-container">
+  <div class="unauthorized-box">
+    <h2>Access Denied</h2>
+    <p>You are not authorized to create quests.</p>
+  </div>
+</div>    
+{% endif %}
+  </div>
 </div>
-</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('textarea').forEach(function(textarea) {
@@ -33,4 +43,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
 {% endblock %}

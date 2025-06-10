@@ -1,13 +1,13 @@
 from guest_user.decorators import allow_guest_user
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from .models import Quest, Challenge, Progress, Badge, UserProfile
 from .forms import QuestForm
 from django.utils import timezone
 from .forms import BadgeForm
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
 
@@ -76,21 +76,34 @@ def complete_challenge(request, challenge_id):
         return JsonResponse({'success': True, 'level': user_profile.level, 'xp': user_profile.xp})
     return JsonResponse({'success': False})
 
+
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Account created successfully! You are now logged in.")
-            return redirect('dashboard')
+            form.save()
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")  # Note: `password1` from UserCreationForm
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Account created successfully! You are now logged in.")
+                return redirect('dashboard')
+            else:
+                messages.error(request, "Authentication failed.")
         else:
             messages.error(request, "Please fix the errors below.")
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html", {"form": form})
+
+
 @login_required
 def create_quest(request):
+    if request.user.username != "harsh":
+        return render(request, 'quests/access_denied.html')
+    
     if request.method == 'POST':
         form = QuestForm(request.POST, request.FILES)
         if form.is_valid():
@@ -108,8 +121,10 @@ def create_quest(request):
     
     return render(request, 'quests/create_quest.html', {
         'form': form,
-        'show_badge_message': True,  # <-- Add this line
+        'show_badge_message': True,
     })
+
+    
 
 def create_badge(request):
     if not request.user.is_staff:

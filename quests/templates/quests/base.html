@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'quests/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 <body>
    <div class="header">
@@ -28,28 +27,54 @@
     {% else %}
         <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
     {% endif %}
-</div>
+    </div>
+   </div>
 
-</div>
+   
 
+   {% block content %}{% endblock %}
 
-<div class="badges-section" style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.5rem;">
-    {% if badges %}
-        {% for badge in badges %}
-            {% if badge.icon %}
-                <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" title="{{ badge.name }}" width="48" />
-           
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <span style="color: #fff; font-size: 1.1rem;">No badges yet. Complete more quests!</span>
-    {% endif %}
-    {% if user.is_authenticated and user.username == "admin" %}
-        <a href="{% url 'create_badge' %}" style="margin-left: 1.5rem; color: #ffd740; font-weight: 600;">Add Badge</a>
-    {% endif %}
-</div>
+<!-- Hidden XP percent for instant feedback -->
+{% if xp_percent %}
+<span id="xp_percent" style="display:none;">100</span>
+{% endif %}
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const xpElem = document.getElementById("xp_percent");
+    if (!xpElem) return;
 
-    {% block content %}{% endblock %}
-</body>
-</html>
+    const currentXP = parseInt(xpElem.textContent, 10);
+    const previousXP = parseInt(localStorage.getItem("previousXP") || "0", 10);
+
+    // Check if we just hit 100 XP from below
+    if (currentXP === 100 && previousXP < 100) {
+        showCongratulations();
+    }
+
+    // Save current XP for future comparison
+    localStorage.setItem("previousXP", currentXP.toString());
+});
+
+function showCongratulations() {
+    const popup = document.createElement("div");
+    popup.innerHTML = "<strong>🎉 Congratulations! 🎉<br>You reached 100 XP!</strong>";
+    Object.assign(popup.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "rgba(30,30,38,0.97)",
+        color: "#ffd740",
+        padding: "2rem 3rem",
+        fontSize: "1.5rem",
+        borderRadius: "18px",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+        zIndex: "9999",
+        textAlign: "center"
+    });
+    document.body.appendChild(popup);
+
+    setTimeout(() => popup.remove(), 3000);
+}
+</script>
