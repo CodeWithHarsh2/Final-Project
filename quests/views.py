@@ -47,6 +47,7 @@ def dashboard(request):
         'show_badge_message': show_badge_message,
         'xp_percent': xp_percent,
         'show_instructions': show_instructions,  # <-- for the popup
+        
     })
 
     
@@ -66,24 +67,31 @@ def quest_detail(request, quest_id):
 @allow_guest_user
 def complete_challenge(request, challenge_id):
     if request.method == 'POST':
-        # Use challenge_id from the URL, not from POST data
-        note = request.POST.get('note', '')
         challenge = get_object_or_404(Challenge, id=challenge_id)
         progress, created = Progress.objects.get_or_create(user=request.user, challenge=challenge)
         progress.completed = True
         progress.completed_at = timezone.now()
-        progress.note = note
         progress.save()
-        
+
         user_profile = UserProfile.objects.get(user=request.user)
-        user_profile.xp += 10
-        if user_profile.xp >= 100:
+        xp_before = user_profile.xp + 10  # Calculate XP before reset
+        xp_percent = xp_before if xp_before <= 100 else 100  # Always cap at 100 for popup
+
+        if xp_before >= 100:
             user_profile.level += 1
             user_profile.xp = 0
+        else:
+            user_profile.xp = xp_before
         user_profile.save()
-        
-        return JsonResponse({'success': True, 'level': user_profile.level, 'xp': user_profile.xp})
+
+        return JsonResponse({
+            'success': True,
+            'level': user_profile.level,
+            'xp': user_profile.xp,
+            'xp_percent': xp_percent  # Pass pre-reset XP for popup check
+        })
     return JsonResponse({'success': False})
+
 
 
 def register(request):

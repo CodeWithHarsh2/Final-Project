@@ -8,34 +8,94 @@
       <img src="{{ quest.image.url }}" alt="" style="max-width:100%;border-radius:12px;">
     {% endif %}
 
-    <!-- Quest description added here -->
     {% if quest.description %}
       <div class="quest-description">
         {{ quest.description }}
       </div>
     {% endif %}
 
+
     <div class="challenges-section">
       <h3 class="challenges-heading">Challenges</h3>
       <div class="challenges-list">
         {% for challenge in challenges %}
-  <div class="challenge-card{% if challenge.completed %} completed{% endif %}" id="challenge-{{ challenge.id }}">
-    <div class="challenge-title">{{ challenge.title }}</div>
-    <div class="challenge-description">{{ challenge.description }}</div>
-    {% if challenge.completed %}
-      <span class="challenge-status">Completed</span>
-    {% else %}
-      <form class="complete-form" data-id="{{ challenge.id }}" method="post" action="{% url 'complete_challenge' challenge.id %}">
-        {% csrf_token %}
-        <button class="complete-btn" type="submit">Complete</button>
-      </form>
-    {% endif %}
-  </div>
-{% endfor %}
-
+          <div class="challenge-card{% if challenge.completed %} completed{% endif %}" id="challenge-{{ challenge.id }}">
+            <div class="challenge-title">{{ challenge.title }}</div>
+            <div class="challenge-description">{{ challenge.description }}</div>
+            {% if challenge.completed %}
+              <span class="challenge-status">Completed</span>
+            {% else %}
+              <form class="complete-form" data-id="{{ challenge.id }}">
+                {% csrf_token %}
+                <button class="complete-btn" type="submit">Complete</button>
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
-<script src="{% static 'quests/main.js' %}"></script>
+
+<script>
+function checkAndShowXPEventPopup(newXP) {
+    const lastXP = parseInt(localStorage.getItem("lastXP") || "0", 10);
+    if (lastXP < 100 && newXP === 100) {
+        Swal.fire({
+            title: '🎉 Congratulations!',
+            html: 'You reached 100 XP! You earned a perfectionist!',
+            icon: 'success',
+            confirmButtonText: "Awesome!",
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+        });
+    }
+    localStorage.setItem("lastXP", newXP.toString());
+}
+
+document.querySelectorAll('.complete-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(event) {
+        event.preventDefault();
+        const form = btn.closest('form');
+        const challengeId = form.dataset.id;
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch(`/complete_challenge/${challengeId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update XP bar and label
+                const xpBar = document.getElementById("xp-bar");
+                if (xpBar) {
+                    xpBar.style.width = data.xp_percent + "%";
+                }
+
+                const levelText = document.getElementById("level");
+                if (levelText) {
+                    levelText.textContent = `Current XP: ${data.xp_percent}%`;
+                }
+
+                const xpPercentSpan = document.getElementById("xp_percent");
+                if (xpPercentSpan) {
+                    xpPercentSpan.textContent = data.xp_percent;
+                }
+
+                // Show popup if XP just hit 100
+                checkAndShowXPEventPopup(data.xp_percent);
+
+                // Mark challenge as completed
+                form.innerHTML = `<span class="challenge-status">Completed</span>`;
+                form.closest('.challenge-card').classList.add('completed');
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

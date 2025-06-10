@@ -41,32 +41,28 @@
    {% endif %}
 
    <script>
-   document.addEventListener("DOMContentLoaded", function () {
-       const xpElem = document.getElementById("xp_percent");
-       if (!xpElem) return;
+   // Function to check and show the XP milestone popup
 
-       const currentXP = parseInt(xpElem.textContent, 10);
-       const lastXP = parseInt(localStorage.getItem("lastXP") || "0", 10);
+<script>
+function checkAndShowXPEventPopup(newXP) {
+    const lastXP = parseInt(localStorage.getItem("lastXP") || "0", 10);
+    if (lastXP < 100 && newXP === 100) {
+        Swal.fire({
+            title: '🎉 Congratulations!',
+            html: 'You reached 100 XP!',
+            icon: 'success',
+            confirmButtonText: "Awesome!",
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+        });
+    }
+    localStorage.setItem("lastXP", newXP.toString());
+}
+</script>
 
-       // Show popup only when going from <100 to exactly 100
-       if (lastXP < 100 && currentXP === 100) {
-           Swal.fire({
-               title: '🎉 Congratulations!',
-               html: 'You reached 100 XP!',
-               icon: 'success',
-               confirmButtonText: "Awesome!",
-               showClass: {
-                   popup: 'animate__animated animate__fadeInDown'
-               },
-               hideClass: {
-                   popup: 'animate__animated animate__fadeOutUp'
-               }
-           });
-       }
 
-       // Update lastXP for next check
-       localStorage.setItem("lastXP", currentXP.toString());
-   });
+   
+    
    </script>
 </body>
 </html>
