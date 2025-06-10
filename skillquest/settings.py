@@ -82,3 +82,6 @@ AUTHENTICATION_BACKENDS = [
     "guest_user.backends.GuestBackend",  # This should be last
 ]
 LOGIN_REDIRECT_URL = '/dashboard/'  # or '/' or any valid URL in your project
+LOGOUT_REDIRECT_URL = '/login/'  # or use the named URL for your login page
+
+
