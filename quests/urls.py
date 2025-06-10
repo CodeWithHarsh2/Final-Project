@@ -16,5 +16,10 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('accounts/login/', views.custom_login, name='login'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
+    path('competitions/', views.competition_list, name='competition_list'),
+    path('competitions/<int:competition_id>/', views.competition_detail, name='competition_detail'),
+    path('competitions/join/<int:competition_id>/', views.join_competition, name='join_competition'),
+
+
 ]
 

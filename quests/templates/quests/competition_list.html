@@ -1,0 +1,67 @@
+{% extends 'quests/base.html' %}
+{% block content %}
+<div class="main-container">
+  <div class="quest-card">
+    <h2>Active Competitions</h2>
+    <div class="competition-list">
+      {% for competition in competitions %}
+  <div class="competition-item">
+    <h3>{{ competition.title }}</h3>
+    <p>{{ competition.description }}</p>
+    <div class="competition-meta">
+      <span>Ends: {{ competition.end_date|date:"M d, Y" }}</span>
+      <span>Reward: {{ competition.reward_xp }} XP</span>
+      {% if competition.badge %}
+        <img src="{{ competition.badge.icon.url }}" alt="{{ competition.badge.name }}" width="32">
+      {% endif %}
+    </div>
+        {% if competition.id in joined_ids %}
+    <a href="#" class="button-56 joined" disabled style="background:#aaa;cursor:not-allowed;">Already Enrolled</a>
+{% else %}
+    <a href="{% url 'join_competition' competition.id %}" 
+       class="button-56 join-btn" 
+       data-competition-id="{{ competition.id }}">Join Competition</a>
+{% endif %}
+
+
+
+  </div>
+{% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+document.querySelectorAll('.join-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Prevent double-click
+        if (btn.classList.contains('joined')) return;
+        const competitionId = btn.getAttribute('data-competition-id');
+        fetch(`/competitions/join/${competitionId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                btn.textContent = "Joined Competition";
+                btn.classList.remove("join-btn");
+                btn.classList.add("joined");
+                btn.setAttribute("disabled", "disabled");
+                btn.style.background = "#aaa";
+                btn.style.color = "#fff";
+                btn.style.cursor = "not-allowed";
+                btn.href = "#"; // Prevent further navigation
+            }
+        });
+    });
+});
+</script>
+
+
+{% endblock %}

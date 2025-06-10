@@ -60,3 +60,18 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         from .models import UserProfile
         UserProfile.objects.create(user=instance)
+
+class Competition(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    participants = models.ManyToManyField(UserProfile, through='CompetitionEntry')
+    reward_xp = models.IntegerField(default=100)
+    badge = models.ForeignKey(Badge, on_delete=models.SET_NULL, null=True, blank=True)
+
+class CompetitionEntry(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)
+    completed_at = models.DateTimeField(null=True, blank=True)

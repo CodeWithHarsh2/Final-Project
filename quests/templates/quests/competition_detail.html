@@ -1,0 +1,37 @@
+{% extends 'quests/base.html' %}
+{% block content %}
+<div class="main-container">
+  <div class="quest-card">
+    <h2>{{ competition.title }}</h2>
+    <div class="competition-leaderboard">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in entries %}
+          <tr {% if entry.user.user == request.user %}class="current-user"{% endif %}>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ entry.user.user.username }}</td>
+            <td>{{ entry.score }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if user_entry %}
+    <div class="user-progress">
+      <h3>Your Progress</h3>
+      <p>Score: {{ user_entry.score }}</p>
+      <div class="xp-bar">
+        <div class="xp-progress" style="width: {% widthratio user_entry.score competition.reward_xp 100 %}%"></div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

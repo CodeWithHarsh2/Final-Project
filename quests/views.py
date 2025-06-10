@@ -2,7 +2,7 @@ from guest_user.decorators import allow_guest_user
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
-from .models import Quest, Challenge, Progress, Badge, UserProfile
+from .models import Quest, Challenge, Progress, Badge, UserProfile, CompetitionEntry, Competition
 from .forms import QuestForm
 from django.utils import timezone
 from .forms import BadgeForm
@@ -18,10 +18,6 @@ from .models import UserProfile, Progress, Badge, Quest
 def quest_list(request):
     quests = Quest.objects.all().order_by('-created_at')
     return render(request, 'quests/quest_list.html', {'quests': quests})
-
-
-
-
 
 
 @login_required
@@ -50,8 +46,6 @@ def dashboard(request):
         'show_instructions': show_instructions,  # <-- for the popup
         
     })
-
-    
 
 @allow_guest_user
 def quest_detail(request, quest_id):
@@ -89,15 +83,26 @@ def complete_challenge(request, challenge_id):
             user_profile.xp = xp_before
         user_profile.save()
 
+        # ======== NEW COMPETITION CODE START ========
+        # Update competition scores for active competitions
+        active_entries = CompetitionEntry.objects.filter(
+            user=user_profile,
+            competition__start_date__lte=timezone.now(),
+            competition__end_date__gte=timezone.now()
+        )
+        for entry in active_entries:
+            entry.score += 10  # Award 10 points per challenge completion
+            entry.save()
+        # ======== NEW COMPETITION CODE END ========
+
         return JsonResponse({
             'success': True,
             'level': user_profile.level,
             'xp': user_profile.xp,
             'xp_percent': xp_percent  # Pass pre-reset XP for popup check
         })
+    
     return JsonResponse({'success': False})
-
-
 
 def register(request):
     if request.method == "POST":
@@ -183,4 +188,39 @@ def delete_quest(request, quest_id):
 def create_quest_view(request):
     return render(request, 'skillsquest/create_quest.html')
 
+@login_required
+def competition_list(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    competitions = Competition.objects.filter(end_date__gte=timezone.now())
+    joined_ids = CompetitionEntry.objects.filter(user=user_profile).values_list('competition_id', flat=True)
+    return render(request, 'quests/competition_list.html', {
+        'competitions': competitions,
+        'joined_ids': set(joined_ids),
+        'user_profile': user_profile,
+    })
+
+@login_required
+def join_competition(request, competition_id):
+    if request.method == 'POST':
+        competition = get_object_or_404(Competition, id=competition_id)
+        user_profile = UserProfile.objects.get(user=request.user)
+        CompetitionEntry.objects.get_or_create(user=user_profile, competition=competition)
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+
+
+
+
+@login_required
+def competition_detail(request, competition_id):
+    competition = get_object_or_404(Competition, id=competition_id)
+    entries = CompetitionEntry.objects.filter(competition=competition).order_by('-score')
+    user_entry = entries.filter(user__user=request.user).first()
+    
+    return render(request, 'quests/competition_detail.html', {
+        'competition': competition,
+        'entries': entries,
+        'user_entry': user_entry
+    })
 
