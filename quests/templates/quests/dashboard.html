@@ -1,7 +1,38 @@
-
 {% extends 'quests/base.html' %}
 {% load static %}
 {% block content %}
+{% if show_instructions %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    Swal.fire({
+        title: 'Welcome to SkillSaga!',
+        html: `
+            <div style="text-align:left;">
+                <b>How to use:</b>
+                <ul style="text-align:left;">
+                    <li>Browse quests and accept challenges.</li>
+                    <li>Complete challenges to earn XP and badges.</li>
+                    <li>Track your progress on the dashboard.</li>
+                    <li>Check the leaderboard and compete with friends!</li>
+                </ul>
+                <span style="color:#ffd740;">Enjoy your adventure!</span>
+            </div>
+        `,
+        icon: 'info',
+        confirmButtonText: 'Let\'s Go!',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        }
+    });
+});
+</script>
+{% endif %}
+
+
+
    <div class="badges-section" style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.5rem;">
     {% if badges %}
         {% for badge in badges %}
@@ -72,6 +103,4 @@
     {% endfor %}
 </ol>
 
-
 {% endblock %}
-

@@ -1,12 +1,12 @@
 from guest_user.decorators import allow_guest_user
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
 from .models import Quest, Challenge, Progress, Badge, UserProfile
 from .forms import QuestForm
 from django.utils import timezone
 from .forms import BadgeForm
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
@@ -18,6 +18,10 @@ def quest_list(request):
     return render(request, 'quests/quest_list.html', {'quests': quests})
 
 
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import UserProfile, Progress, Badge, Quest
 
 @login_required
 def dashboard(request):
@@ -32,6 +36,9 @@ def dashboard(request):
     # Show badge message if no badges
     show_badge_message = not badges.exists()
 
+    # Check for the instructions popup session variable (for SweetAlert2 or similar)
+    show_instructions = request.session.pop('show_instructions', False)
+    print("show_instructions:", show_instructions)
     return render(request, 'quests/dashboard.html', {
         'user_profile': user_profile,
         'progresses': progresses,
@@ -39,8 +46,10 @@ def dashboard(request):
         'quests': quests,
         'show_badge_message': show_badge_message,
         'xp_percent': xp_percent,
+        'show_instructions': show_instructions,  # <-- for the popup
     })
 
+    
 
 @allow_guest_user
 def quest_detail(request, quest_id):
@@ -125,6 +134,30 @@ def create_quest(request):
     })
 
     
+# Custom login view
+# def custom_login(request):
+#     if request.method == "POST":
+#         form = AuthenticationForm(request, data=request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             # Set session variable to trigger instructions popup
+#             request.session['show_instructions'] = True
+#             return redirect('dashboard')
+#     else:
+#         form = AuthenticationForm()
+#     return render(request, "registration/login.html", {"form": form})
+def custom_login(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            request.session['show_instructions'] = True  # THIS LINE IS CRUCIAL
+            return redirect('dashboard')
+    else:
+        form = AuthenticationForm()
+    return render(request, "registration/login.html", {"form": form})
 
 def create_badge(request):
     if not request.user.is_staff:
@@ -149,3 +182,5 @@ def delete_quest(request, quest_id):
 
 def create_quest_view(request):
     return render(request, 'skillsquest/create_quest.html')
+
+

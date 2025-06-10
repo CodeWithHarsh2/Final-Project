@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'quests/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 CSS & JS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
    <div class="header">
@@ -30,51 +33,40 @@
     </div>
    </div>
 
-   
-
    {% block content %}{% endblock %}
 
-<!-- Hidden XP percent for instant feedback -->
-{% if xp_percent %}
-<span id="xp_percent" style="display:none;">100</span>
-{% endif %}
+   <!-- Hidden XP percent for instant feedback -->
+   {% if xp_percent %}
+   <span id="xp_percent" style="display:none;">{{ xp_percent }}</span>
+   {% endif %}
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const xpElem = document.getElementById("xp_percent");
-    if (!xpElem) return;
+   <script>
+   document.addEventListener("DOMContentLoaded", function () {
+       const xpElem = document.getElementById("xp_percent");
+       if (!xpElem) return;
 
-    const currentXP = parseInt(xpElem.textContent, 10);
-    const previousXP = parseInt(localStorage.getItem("previousXP") || "0", 10);
+       const currentXP = parseInt(xpElem.textContent, 10);
+       const lastXP = parseInt(localStorage.getItem("lastXP") || "0", 10);
 
-    // Check if we just hit 100 XP from below
-    if (currentXP === 100 && previousXP < 100) {
-        showCongratulations();
-    }
+       // Show popup only when going from <100 to exactly 100
+       if (lastXP < 100 && currentXP === 100) {
+           Swal.fire({
+               title: '🎉 Congratulations!',
+               html: 'You reached 100 XP!',
+               icon: 'success',
+               confirmButtonText: "Awesome!",
+               showClass: {
+                   popup: 'animate__animated animate__fadeInDown'
+               },
+               hideClass: {
+                   popup: 'animate__animated animate__fadeOutUp'
+               }
+           });
+       }
 
-    // Save current XP for future comparison
-    localStorage.setItem("previousXP", currentXP.toString());
-});
-
-function showCongratulations() {
-    const popup = document.createElement("div");
-    popup.innerHTML = "<strong>🎉 Congratulations! 🎉<br>You reached 100 XP!</strong>";
-    Object.assign(popup.style, {
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        background: "rgba(30,30,38,0.97)",
-        color: "#ffd740",
-        padding: "2rem 3rem",
-        fontSize: "1.5rem",
-        borderRadius: "18px",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-        zIndex: "9999",
-        textAlign: "center"
-    });
-    document.body.appendChild(popup);
-
-    setTimeout(() => popup.remove(), 3000);
-}
-</script>
+       // Update lastXP for next check
+       localStorage.setItem("lastXP", currentXP.toString());
+   });
+   </script>
+</body>
+</html>

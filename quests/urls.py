@@ -14,7 +14,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('complete_challenge/<int:challenge_id>/', views.complete_challenge, name='complete_challenge'),
     path('register/', views.register, name='register'),
-    
+  path('accounts/login/', views.custom_login, name='login'),
 
 ]
 
