@@ -605,9 +605,10 @@ body::after {
 
 .level-badge {
   display: block;
-  position: fixed;
-  top: 25%;
-  left: 38%;
+  position: absolute;
+  top: 27%;
+  translate: (-50px,-50px);
+  left: 45%;
   font-size: 0.9rem;
   font-weight: 700;
   color: #ffd740;
@@ -627,7 +628,6 @@ body::after {
 ol {
   list-style-type: decimal;
   padding-left: 2rem;
- 
   align-items: center;
   
 }

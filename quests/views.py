@@ -26,6 +26,7 @@ def quest_list(request):
 
 @login_required
 def dashboard(request):
+    check_competition_winner(request)
     user_profile = UserProfile.objects.get(user=request.user)
     progresses = Progress.objects.filter(user=request.user, completed=True)
     badges = Badge.objects.filter(xp_required__lte=user_profile.xp)
@@ -78,61 +79,43 @@ def complete_challenge(request, challenge_id):
     if request.method == 'POST':
         challenge = get_object_or_404(Challenge, id=challenge_id)
         progress, created = Progress.objects.get_or_create(user=request.user, challenge=challenge)
-        
         if not progress.completed:
             progress.completed = True
             progress.completed_at = timezone.now()
             progress.save()
 
-            # XP and level logic
             user_profile = UserProfile.objects.get(user=request.user)
             xp_before = user_profile.xp
             xp_after = xp_before + 10
-            popup_triggered = (xp_before < 100 and xp_after >= 100)
-            leveled_up = False
-
-            if xp_after >= 100:
-                user_profile.level += 1
-                user_profile.xp = xp_after - 100  # Carry over extra XP
-                leveled_up = True
-            else:
-                user_profile.xp = xp_after
+            milestone_reached = (xp_before < 100 and xp_after >= 100) or (xp_before // 100 < xp_after // 100)
+            # Level up every time you cross a new 100-XP boundary
+            level_ups = (xp_after // 100) - (xp_before // 100)
+            if level_ups > 0:
+                user_profile.level += level_ups
+            user_profile.xp = xp_after  # XP is NOT reset!
             user_profile.save()
-
-            # Update competition entries
-            active_entries = CompetitionEntry.objects.filter(
-                user=user_profile,
-                competition__start_datetime__lte=timezone.now(),
-                competition__end_datetime__gte=timezone.now()
-            )
-            for entry in active_entries:
-                entry.score += 10
-                entry.save()
 
             return JsonResponse({
                 'success': True,
                 'level': user_profile.level,
-                'xp': user_profile.xp,
-                'xp_percent': min(xp_after, 100),  # Ensures progress bar hits 100
+                'xp': user_profile.xp,  # Total XP for leaderboard
+                'xp_percent': 100,      # Always 100 for dashboard bar after 100
                 'challenge_id': challenge_id,
                 'completed': True,
-                'leveled_up': leveled_up,
-                'popup_triggered': (xp_before < 100 and xp_after >= 100)  # For frontend popup
+                'milestone_reached': milestone_reached  # Use for the popup!
             })
         else:
-            # Already completed case
             user_profile = UserProfile.objects.get(user=request.user)
             return JsonResponse({
                 'success': True,
                 'already_completed': True,
                 'level': user_profile.level,
                 'xp': user_profile.xp,
-                'xp_percent': user_profile.xp,
+                'xp_percent': 100 if user_profile.xp >= 100 else user_profile.xp,
                 'challenge_id': challenge_id,
                 'completed': True,
-                'popup_triggered': False  # Explicitly set for safety
+                'milestone_reached': False
             })
-    
     return JsonResponse({'success': False})
 
 def register(request):
@@ -190,10 +173,13 @@ def custom_login(request):
             user = form.get_user()
             login(request, user)
             request.session['show_instructions'] = True  # THIS LINE IS CRUCIAL
+            check_competition_winner(request)
             return redirect('dashboard')
     else:
         form = AuthenticationForm()
     return render(request, "registration/login.html", {"form": form})
+
+
 
 def create_badge(request):
     if not request.user.is_staff:
@@ -273,6 +259,23 @@ def check_competition_winner(request):
                 request.session['show_competition_win'] = comp.id
                 shown.append(comp.id)
                 request.session['competition_win_shown'] = shown
+
+@login_required
+def check_competition_win(request):
+    check_competition_winner(request)
+    show = 'show_competition_win' in request.session
+    competition_name = None
+    if show:
+        from .models import Competition
+        comp_id = request.session['show_competition_win']
+        try:
+            competition = Competition.objects.get(id=comp_id)
+            competition_name = competition.title
+        except Competition.DoesNotExist:
+            competition_name = ""
+    return JsonResponse({'show_popup': show, 'competition_name': competition_name})
+
+
 
 
 @login_required

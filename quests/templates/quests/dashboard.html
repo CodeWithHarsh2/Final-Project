@@ -52,9 +52,14 @@ document.addEventListener("DOMContentLoaded", function() {
     <div>
         
         <div id="xp-bar-container">
-            <div id="xp-bar" style="width: {{ xp_percent }}%;"></div>
-            <strong><span class="level-badge" id="level">Current XP Percentage: {{ xp_percent }}%</span></strong>
-        </div>
+    <div id="xp-bar" style="width: {{ xp_percent }}%;"></div>
+    <strong>
+      <span class="level-badge" id="level">
+        XP shown: {{ xp_percent }}%
+      </span>
+    </strong>
+</div>
+
     </div>
     <h2>Your Quests</h2>
     <ul>

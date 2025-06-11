@@ -155,5 +155,29 @@ document.getElementById('share-btn').addEventListener('click', function() {
 });
 </script>
 
+{% if user.is_authenticated %}
+<script>
+setInterval(function() {
+    fetch('/check-competition-win/', {credentials: 'same-origin'})
+      .then(res => res.json())
+      .then(data => {
+        if (data.show_popup) {
+          Swal.fire({
+            title: '🎉 Congratulations!',
+            html: `You are the winner of the competition ${data.competition_name}!`,
+            icon: 'success',
+            confirmButtonText: "Awesome!"
+          });
+          fetch('/clear-competition-win/', {
+            method: 'POST',
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}
+          });
+        }
+      });
+}, 60000); // Check every 60 seconds
+</script>
+{% endif %}
+
+
 </body>
 </html>
