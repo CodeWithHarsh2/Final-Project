@@ -1376,3 +1376,61 @@ ol {
   top: 150%;
 }
 
+
+/* Share Button Styles */
+button#share-btn {
+  height: 4em;
+  position: absolute;
+  top: 80px;
+ z-index: 1500;
+  right: 50px;
+  width: 9.6em;
+  border: none;
+  border-radius: 40px;
+  background-color: #fff;
+  cursor: pointer;
+  margin: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  
+}
+
+button#share-btn span {
+  z-index: 1;
+  display: inline-block;
+  background-color: black;
+  height: 3.4em;
+  width: 8em;
+  border-radius: 25px;
+  color: #fff;
+  line-height: 55px;
+  font-size: 16px;
+  letter-spacing: 3px;
+  transition: all 0.5s;
+}
+
+button#share-btn .container {
+  z-index: -1;
+  width: 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  transform: translateY(-50px);
+  transition: all 0.4s;
+}
+
+button#share-btn .container svg {
+  padding: 0 10px;
+  fill: #333; /* Add color to icons */
+  width: 100px;   /* Make icons smaller */
+  height:50px;
+}
+
+button#share-btn:hover span {
+  width: 0;
+}
+
+button#share-btn:hover .container {
+  z-index: 2;
+  width: 100%;
+}
+
