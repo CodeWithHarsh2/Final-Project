@@ -38,62 +38,58 @@
 </div>
 
 <script>
-function checkAndShowXPEventPopup(newXP) {
-    const lastXP = parseInt(localStorage.getItem("lastXP") || "0", 10);
-    if (lastXP < 100 && newXP === 100) {
-        Swal.fire({
-            title: '🎉 Congratulations!',
-            html: 'You reached 100 XP! You earned a perfectionist!',
-            icon: 'success',
-            confirmButtonText: "Awesome!",
-            showClass: { popup: 'animate__animated animate__fadeInDown' },
-            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-        });
-    }
-    localStorage.setItem("lastXP", newXP.toString());
-}
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.complete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            const form = btn.closest('form');
+            const challengeId = form.dataset.id;
+            const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
 
-document.querySelectorAll('.complete-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(event) {
-        event.preventDefault();
-        const form = btn.closest('form');
-        const challengeId = form.dataset.id;
-        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+            fetch(`/complete_challenge/${challengeId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update XP bar and label
+                    const xpBar = document.getElementById("xp-bar");
+                    if (xpBar) {
+                        xpBar.style.width = data.xp_percent + "%";
+                    }
 
-        fetch(`/complete_challenge/${challengeId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update XP bar and label
-                const xpBar = document.getElementById("xp-bar");
-                if (xpBar) {
-                    xpBar.style.width = data.xp_percent + "%";
+                    const levelText = document.getElementById("level");
+                    if (levelText) {
+                        levelText.textContent = `Current XP: ${data.xp_percent}%`;
+                    }
+
+                    const xpPercentSpan = document.getElementById("xp_percent");
+                    if (xpPercentSpan) {
+                        xpPercentSpan.textContent = data.xp_percent;
+                    }
+
+                    // Show popup if XP just hit 100
+                    if (data.popup_triggered) {
+                        Swal.fire({
+                            title: '🎉 Congratulations!',
+                            html: 'You reached 100 XP! You earned a perfectionist!',
+                            icon: 'success',
+                            confirmButtonText: "Awesome!",
+                            showClass: { popup: 'animate__animated animate__fadeInDown' },
+                            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+                        });
+                    }
+
+                    // Mark challenge as completed
+                    form.innerHTML = `<span class="challenge-status">Completed</span>`;
+                    form.closest('.challenge-card').classList.add('completed');
                 }
-
-                const levelText = document.getElementById("level");
-                if (levelText) {
-                    levelText.textContent = `Current XP: ${data.xp_percent}%`;
-                }
-
-                const xpPercentSpan = document.getElementById("xp_percent");
-                if (xpPercentSpan) {
-                    xpPercentSpan.textContent = data.xp_percent;
-                }
-
-                // Show popup if XP just hit 100
-                checkAndShowXPEventPopup(data.xp_percent);
-
-                // Mark challenge as completed
-                form.innerHTML = `<span class="challenge-status">Completed</span>`;
-                form.closest('.challenge-card').classList.add('completed');
-            }
+            });
         });
     });
 });

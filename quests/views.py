@@ -54,57 +54,84 @@ def dashboard(request):
 @allow_guest_user
 def quest_detail(request, quest_id):
     quest = get_object_or_404(Quest, id=quest_id)
-    challenges = quest.challenges.order_by('order')
-    user_progress = {p.challenge.id: p for p in Progress.objects.filter(user=request.user, challenge__in=challenges)}
+    challenges = Challenge.objects.filter(quest=quest)
+    completed_ids = set(
+        Progress.objects.filter(user=request.user, completed=True)
+        .values_list('challenge_id', flat=True)
+    )
+    for challenge in challenges:
+        challenge.completed = challenge.id in completed_ids
+    # Pass challenges to template as usual
     return render(request, 'quests/quest_detail.html', {
         'quest': quest,
         'challenges': challenges,
-        'user_progress': user_progress,
-        'show_badge_message': False,  # <--- Add this line
+        # ...other context...
     })
+
 def leaderboard(request):
     # Top 10 users by XP
     users = UserProfile.objects.order_by('-xp')[:10]
     return render(request, 'quests/leaderboard.html', {'users': users})
 
-@allow_guest_user
+@login_required
 def complete_challenge(request, challenge_id):
     if request.method == 'POST':
         challenge = get_object_or_404(Challenge, id=challenge_id)
         progress, created = Progress.objects.get_or_create(user=request.user, challenge=challenge)
-        progress.completed = True
-        progress.completed_at = timezone.now()
-        progress.save()
+        
+        if not progress.completed:
+            progress.completed = True
+            progress.completed_at = timezone.now()
+            progress.save()
 
-        user_profile = UserProfile.objects.get(user=request.user)
-        xp_before = user_profile.xp + 10  # Calculate XP before reset
-        xp_percent = xp_before if xp_before <= 100 else 100  # Always cap at 100 for popup
+            # XP and level logic
+            user_profile = UserProfile.objects.get(user=request.user)
+            xp_before = user_profile.xp
+            xp_after = xp_before + 10
+            popup_triggered = (xp_before < 100 and xp_after >= 100)
+            leveled_up = False
 
-        if xp_before >= 100:
-            user_profile.level += 1
-            user_profile.xp = 0
+            if xp_after >= 100:
+                user_profile.level += 1
+                user_profile.xp = xp_after - 100  # Carry over extra XP
+                leveled_up = True
+            else:
+                user_profile.xp = xp_after
+            user_profile.save()
+
+            # Update competition entries
+            active_entries = CompetitionEntry.objects.filter(
+                user=user_profile,
+                competition__start_datetime__lte=timezone.now(),
+                competition__end_datetime__gte=timezone.now()
+            )
+            for entry in active_entries:
+                entry.score += 10
+                entry.save()
+
+            return JsonResponse({
+                'success': True,
+                'level': user_profile.level,
+                'xp': user_profile.xp,
+                'xp_percent': min(xp_after, 100),  # Ensures progress bar hits 100
+                'challenge_id': challenge_id,
+                'completed': True,
+                'leveled_up': leveled_up,
+                'popup_triggered': (xp_before < 100 and xp_after >= 100)  # For frontend popup
+            })
         else:
-            user_profile.xp = xp_before
-        user_profile.save()
-
-        # ======== NEW COMPETITION CODE start_datetime ========
-        # Update competition scores for active competitions
-        active_entries = CompetitionEntry.objects.filter(
-            user=user_profile,
-            competition__start_datetime__lte=timezone.now(),
-            competition__end_datetime__gte=timezone.now()
-        )
-        for entry in active_entries:
-            entry.score += 10  # Award 10 points per challenge completion
-            entry.save()
-        # ======== NEW COMPETITION CODE END ========
-
-        return JsonResponse({
-            'success': True,
-            'level': user_profile.level,
-            'xp': user_profile.xp,
-            'xp_percent': xp_percent  # Pass pre-reset XP for popup check
-        })
+            # Already completed case
+            user_profile = UserProfile.objects.get(user=request.user)
+            return JsonResponse({
+                'success': True,
+                'already_completed': True,
+                'level': user_profile.level,
+                'xp': user_profile.xp,
+                'xp_percent': user_profile.xp,
+                'challenge_id': challenge_id,
+                'completed': True,
+                'popup_triggered': False  # Explicitly set for safety
+            })
     
     return JsonResponse({'success': False})
 

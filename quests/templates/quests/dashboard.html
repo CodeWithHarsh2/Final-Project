@@ -94,7 +94,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 {% if user.is_staff %}
                     <form action="{% url 'delete_quest' quest.id %}" method="post" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="button-56" onclick="return confirm('Delete this quest?');">Delete</button>
+                        {% comment %} <button type="submit" class="button-56" onclick="return confirm('Delete this quest?');">Delete</button> {% endcomment %}
+                         <button type="submit" class="custom-button"  onclick="return confirm('Delete this quest?');">
+                            <span class="button-glow"></span>
+                            Delete
+                        </button>
                     </form>
                 {% endif %}
             </div>

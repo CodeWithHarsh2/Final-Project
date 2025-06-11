@@ -26,6 +26,8 @@ class UserProfile(models.Model):
     competitions_won = models.PositiveIntegerField(blank=True, null=True)
     competitions_participated = models.PositiveIntegerField(blank=True, null=True)
     xp = models.PositiveIntegerField(default=0)
+    level = models.PositiveIntegerField(default=1)
+
 
     def __str__(self):
         return self.user.username

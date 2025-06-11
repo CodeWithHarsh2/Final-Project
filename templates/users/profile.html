@@ -83,19 +83,19 @@
         </div>
         <div class="profile-counters">
             <div class="profile-counter-block">
-                <div class="count">{{ user_profile.happy_clients|default:"500" }}</div>
+                <div class="count">{{ user_profile.quests_completed|default:"0" }}</div>
                 <p>Quests Completed</p>
             </div>
             <div class="profile-counter-block">
-                <div class="count">{{ user_profile.xp|default:"150" }}</div>
+                <div class="count">{{ user_profile.xp_collected|default:"0" }}</div>
                 <p>XP Collected</p>
             </div>
             <div class="profile-counter-block">
-                <div class="count">{{ user_profile.competitions_won|default:"850" }}</div>
+                <div class="count">{{ user_profile.competitions_won|default:"0" }}</div>
                 <p>Competitions Won</p>
             </div>
             <div class="profile-counter-block">
-                <div class="count">{{ user_profile.competitions_participated|default:"190" }}</div>
+                <div class="count">{{ user_profile.competitions_participated|default:"0" }}</div>
                 <p>Competitions Participated</p>
             </div>
         </div>
