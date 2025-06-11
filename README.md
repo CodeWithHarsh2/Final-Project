@@ -54,32 +54,12 @@ SkillSaga is not a simple CRUD app or a standard Django project. It required int
 ## How to Run the Application
 
 1. **Clone the repository and navigate to the project directory:**
-   ```
-   git clone 
-   cd 
-   ```
 2. **Create and activate a virtual environment (recommended):**
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
 3. **Install dependencies:**
-   ```
-   pip install -r requirements.txt
-   ```
 4. **Apply migrations:**
-   ```
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
 5. **Create a superuser (for admin access):**
-   ```
-   python manage.py createsuperuser
-   ```
 6. **Run the development server:**
-   ```
    python manage.py runserver
-   ```
 7. **Access the app:**
    - Go to `http://127.0.0.1:8000/` for the main site.
    - Go to `http://127.0.0.1:8000/admin/` for the Django admin.
@@ -93,9 +73,8 @@ SkillSaga is not a simple CRUD app or a standard Django project. It required int
 - **Pillow**: Image upload support.
 
 Install all dependencies with:
-```
+
 pip install -r requirements.txt
-```
 
 ---
 
