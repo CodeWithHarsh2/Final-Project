@@ -71,7 +71,7 @@ def quest_detail(request, quest_id):
 
 def leaderboard(request):
     # Top 10 users by XP
-    users = UserProfile.objects.order_by('-xp')[:10]
+    users = UserProfile.objects.order_by('-xp')
     return render(request, 'quests/leaderboard.html', {'users': users})
 
 @login_required
@@ -275,9 +275,6 @@ def check_competition_win(request):
             competition_name = ""
     return JsonResponse({'show_popup': show, 'competition_name': competition_name})
 
-
-
-
 @login_required
 def profile(request, username=None):
     if username:
@@ -324,3 +321,14 @@ def create_competition(request):
     else:
         form = CompetitionForm()
     return render(request, "competitions/competition_form.html", {"form": form})
+
+def award_competition_xp(competition):
+    entries = competition.competitionentry_set.all()
+    if not entries:
+        return
+    top_score = max(entry.score for entry in entries)
+    winners = [entry.user for entry in entries if entry.score == top_score]
+    for winner_profile in winners:
+        winner_profile.xp += competition.reward_xp
+        winner_profile.save()
+

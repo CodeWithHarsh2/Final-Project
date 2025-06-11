@@ -41,7 +41,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.complete-btn').forEach(function(btn) {
         btn.addEventListener('click', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent form submission/reload!
             const form = btn.closest('form');
             const challengeId = form.dataset.id;
             const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -56,26 +56,33 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-    if (data.success) {
-        // Update XP bar and label
-        const xpBar = document.getElementById("xp-bar");
-        if (xpBar) {
-            xpBar.style.width = data.xp_percent + "%";
-        }
-        const levelText = document.getElementById("level");
-        if (levelText) {
-            levelText.textContent = `Current XP Percentage: ${data.xp_percent}%`;
-        }
-        // Show popup if milestone reached
-        if (data.milestone_reached) {
-            Swal.fire({
-                title: '🎉 Congratulations!',
-                html: 'You reached 100 XP and earned perfectionist!'
-                icon: 'success',
-                confirmButtonText: "Awesome!",
-                showClass: { popup: 'animate__animated animate__fadeInDown' },
-                hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-            });
+                if (data.success) {
+                    // Update XP bar and label
+                    const xpBar = document.getElementById("xp-bar");
+                    if (xpBar) {
+                        xpBar.style.width = data.xp_percent + "%";
+                    }
+
+                    const levelText = document.getElementById("level");
+                    if (levelText) {
+                        levelText.textContent = `Current XP: ${data.xp_percent}%`;
+                    }
+
+                    const xpPercentSpan = document.getElementById("xp_percent");
+                    if (xpPercentSpan) {
+                        xpPercentSpan.textContent = data.xp_percent;
+                    }
+
+                    // Show popup if XP just hit 100
+                    if (data.popup_triggered) {
+                        Swal.fire({
+                            title: '🎉 Congratulations!',
+                            html: 'You reached 100 XP! You earned a perfectionist!',
+                            icon: 'success',
+                            confirmButtonText: "Awesome!",
+                            showClass: { popup: 'animate__animated animate__fadeInDown' },
+                            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+                        });
                     }
 
                     // Mark challenge as completed
@@ -86,5 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 </script>
 {% endblock %}

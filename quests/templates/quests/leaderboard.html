@@ -12,11 +12,11 @@
         </tr>
       </thead>
       <tbody>
-        {% for user in users %}
-        <tr {% if user.user == request.user %}style="background:#333;"{% endif %}>
+        {% for userprofile in users %}
+        <tr {% if userprofile.user == request.user %}style="background:#333;"{% endif %}>
           <td style="text-align:center;">{{ forloop.counter }}</td>
-          <td style="text-align:center;">{{ user.user.username }}</td>
-          <td style="text-align:center;">{{ user.xp }}</td>
+          <td style="text-align:center;">{{ userprofile.user.username }}</td>
+          <td style="text-align:center;">{{ userprofile.xp }}</td>
         </tr>
         {% endfor %}
       </tbody>
