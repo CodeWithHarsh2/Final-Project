@@ -1,4 +1,4 @@
-```markdown
+
 # SkillSaga: Quest, Challenge, and Competition Platform
 
 SkillSaga is a comprehensive web application designed to gamify learning and achievement through quests, challenges, and competitions. Users can create and complete quests, participate in challenges, earn XP, level up, and compete in time-bound competitions. The platform is built with Django and features robust user profile management, interactive UI elements, real-time feedback, and a focus on a seamless, engaging user experience.
@@ -93,4 +93,4 @@ pip install -r requirements.txt
 SkillSaga is a **complex, feature-rich platform** that goes far beyond typical course projects. It demonstrates advanced skills in Django, JavaScript, AJAX, UI customization, and real-time feedback mechanisms. The integration of gamification, custom admin widgets, and a robust user/competition system distinguishes it from standard CRUD or blog apps, and required significant design, troubleshooting, and technical depth to implement and polish.
 
 ---
-```
+
