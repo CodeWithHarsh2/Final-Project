@@ -12,6 +12,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import UserProfile, Progress, Badge, Quest
+from django.views.decorators.csrf import csrf_exempt
+from .forms import UserProfileForm
+from .forms import CompetitionForm
+
 
 
 
@@ -83,12 +87,12 @@ def complete_challenge(request, challenge_id):
             user_profile.xp = xp_before
         user_profile.save()
 
-        # ======== NEW COMPETITION CODE START ========
+        # ======== NEW COMPETITION CODE start_datetime ========
         # Update competition scores for active competitions
         active_entries = CompetitionEntry.objects.filter(
             user=user_profile,
-            competition__start_date__lte=timezone.now(),
-            competition__end_date__gte=timezone.now()
+            competition__start_datetime__lte=timezone.now(),
+            competition__end_datetime__gte=timezone.now()
         )
         for entry in active_entries:
             entry.score += 10  # Award 10 points per challenge completion
@@ -191,7 +195,7 @@ def create_quest_view(request):
 @login_required
 def competition_list(request):
     user_profile = UserProfile.objects.get(user=request.user)
-    competitions = Competition.objects.filter(end_date__gte=timezone.now())
+    competitions = Competition.objects.filter(end_datetime__gte=timezone.now())
     joined_ids = CompetitionEntry.objects.filter(user=user_profile).values_list('competition_id', flat=True)
     return render(request, 'quests/competition_list.html', {
         'competitions': competitions,
@@ -224,3 +228,69 @@ def competition_detail(request, competition_id):
         'user_entry': user_entry
     })
 
+
+def check_competition_winner(request):
+    if not request.user.is_authenticated:
+        return
+    user_profile = UserProfile.objects.get(user=request.user)
+    now = timezone.now()
+    ended_comps = Competition.objects.filter(end_datetime__lt=now)
+    for comp in ended_comps:
+        top_score = CompetitionEntry.objects.filter(competition=comp).order_by('-score').first()
+        if not top_score:
+            continue
+        winners = CompetitionEntry.objects.filter(competition=comp, score=top_score.score)
+        if winners.filter(user=user_profile).exists():
+            shown = request.session.get('competition_win_shown', [])
+            if comp.id not in shown:
+                request.session['show_competition_win'] = comp.id
+                shown.append(comp.id)
+                request.session['competition_win_shown'] = shown
+
+
+@login_required
+def profile(request, username=None):
+    if username:
+        user_profile = get_object_or_404(UserProfile, user__username=username)
+        is_owner = (request.user.username == username)
+    else:
+        user_profile = UserProfile.objects.get(user=request.user)
+        is_owner = True
+
+    edit_mode = is_owner and request.GET.get("edit") == "1"
+
+    if request.method == 'POST' and is_owner:
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            # Redirect to profile view mode after saving
+            return redirect('profile', username=request.user.username)
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'users/profile.html', {
+        'profile_user': user_profile.user,
+        'user_profile': user_profile,
+        'form': form,
+        'is_owner': is_owner,
+        'edit_mode': edit_mode,
+    })
+
+
+
+@csrf_exempt
+def clear_competition_win(request):
+    if request.method == 'POST':
+        request.session.pop('show_competition_win', None)
+        return JsonResponse({'cleared': True})
+    return JsonResponse({'cleared': False})
+
+def create_competition(request):
+    if request.method == "POST":
+        form = CompetitionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # redirect or show success
+    else:
+        form = CompetitionForm()
+    return render(request, "competitions/competition_form.html", {"form": form})

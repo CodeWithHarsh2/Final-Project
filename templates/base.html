@@ -25,7 +25,7 @@
         <a href="{% url 'competition_list' %}">Competitions</a>
         {% if user.is_authenticated %}
 
-    {% endif %}
+        {% endif %}
     </nav>
     <div class="user-info">
     {% if user.is_authenticated %}
@@ -38,8 +38,7 @@
         <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
     {% endif %}
     </div>
-   </div>
-   {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
   <a href="{% url 'profile' user.username %}" class="navbar-profile-icon">
     {% if user.userprofile.avatar %}
       <img src="{{ user.userprofile.avatar.url }}" alt="Profile" />
@@ -48,7 +47,7 @@
     {% endif %}
   </a>
 {% endif %}
-
+   </div>
 
    {% block content %}{% endblock %}
 

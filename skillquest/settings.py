@@ -8,6 +8,7 @@ SECRET_KEY = 'replace-this-with-your-own-secret-key'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,6 +19,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'quests',  # Register your app here
     "guest_user",
+    "bootstrap_datepicker_plus",
+    "django_flatpickr",
+
 ]
 
 MIDDLEWARE = [
@@ -83,5 +87,12 @@ AUTHENTICATION_BACKENDS = [
 ]
 LOGIN_REDIRECT_URL = '/dashboard/'  # or '/' or any valid URL in your project
 LOGOUT_REDIRECT_URL = '/login/'  # or use the named URL for your login page
+
+# Add more time options to admin
+USE_L10N = False
+TIME_INPUT_FORMATS = [
+    '%H:%M:%S',     # '14:30:59'
+    '%H:%M',        # '14:30'
+]
 
 

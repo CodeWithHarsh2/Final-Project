@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+{# --- EDIT MODE --- #}
+{% if edit_mode %}
+<div class="profile-edit-bg">
+    <div class="profile-edit-card">
+        <form method="post" enctype="multipart/form-data" class="profile-edit-form">
+            {% csrf_token %}
+            <div class="profile-avatar-row">
+    {# Avatar image preview #}
+    {% if user_profile.avatar %}
+        <img src="{{ user_profile.avatar.url }}" alt="{{ profile_user.username }}'s Avatar">
+    {% else %}
+        <img src="{% static 'quests/images/default_avatar.jpg' %}" alt="{{ profile_user.username }}'s Avatar">
+    {% endif %}
+    
+    {# Clear checkbox #}
+     <label class="avatar-file-label" style="margin-bottom:0;">
+        {{ form.avatar }}
+    </label>
+</div>
+    
+            
+            {{ form.bio.label_tag }}{{ form.bio }}
+            {{ form.description.label_tag }}{{ form.description }}
+            {{ form.birthday.label_tag }}{{ form.birthday }}
+            {{ form.age.label_tag }}{{ form.age }}
+            {{ form.residence.label_tag }}{{ form.residence }}
+            {{ form.address.label_tag }}{{ form.address }}
+            {{ form.email.label_tag }}{{ form.email }}
+            {{ form.phone.label_tag }}{{ form.phone }}
+            {{ form.skype.label_tag }}{{ form.skype }}
+            {{ form.freelance.label_tag }}{{ form.freelance }}
+            {{ form.quests_completed.label_tag }}{{ form.quests_completed }}
+            {{ form.xp_collected.label_tag }}{{ form.xp_collected }}
+            {{ form.competitions_won.label_tag }}{{ form.competitions_won }}
+            {{ form.competitions_participated.label_tag }}{{ form.competitions_participated}}
+            <button type="submit" class="nice-btn">Save Changes</button>
+            <a href="{% url 'profile' profile_user.username %}" class="nice-btn" style="background:#aaa;margin-left:10px;">Cancel</a>
+        </form>
+    </div>
+</div>
+{% else %}
+{# --- VIEW MODE --- #}
+<div class="profile-main-bg">
+    <section class="profile-section">
+        <div class="profile-card">
+            <div style="text-align:center;">
+                {% if user_profile.avatar %}
+                    <img src="{{ user_profile.avatar.url }}" alt="{{ profile_user.username }}'s Avatar" class="profile-avatar-large">
+                {% else %}
+                    <img src="{% static 'quests/images/default_avatar.jpg' %}" alt="{{ profile_user.username }}'s Avatar" class="profile-avatar-large">
+                {% endif %}
+            </div>
+            <div class="profile-info-main">
+                <h1>About Me</h1>
+                <div class="subtitle">
+                    {{ user_profile.bio|default:"" }}
+                </div>
+                <p>
+                    {{ user_profile.description|default:"" }}
+                </p>
+                <div class="profile-details-table">
+                    <div class="col">
+                        <div class="row"><label>Birthday</label> <p>/ {{ user_profile.birthday|default:"" }}</p></div>
+                        <div class="row"><label>Age</label> <p>/ {{ user_profile.age|default:"" }}</p></div>
+                        <div class="row"><label>Residence</label> <p>/ {{ user_profile.residence|default:"" }}</p></div>
+                        <div class="row"><label>Address</label> <p>/ {{ user_profile.address|default:"" }}</p></div>
+                    </div>
+                    <div class="col">
+                        <div class="row"><label>E-mail</label> <p>/ {{ profile_user.email|default:"" }}</p></div>
+                        <div class="row"><label>Phone</label> <p>/ {{ user_profile.phone|default:"" }}</p></div>
+                        <div class="row"><label>Skype</label> <p>/ {{ user_profile.skype|default:"" }}</p></div>
+                        <div class="row"><label>Freelance</label> <p>/ {% if user_profile.freelance %}Available{% else %}Not available{% endif %}</p></div>
+                    </div>
+                </div>
+                {% if is_owner %}
+                    <a href="{% url 'profile' profile_user.username %}?edit=1"  class="button-41" role="button">Edit Profile</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="profile-counters">
+            <div class="profile-counter-block">
+                <div class="count">{{ user_profile.happy_clients|default:"500" }}</div>
+                <p>Quests Completed</p>
+            </div>
+            <div class="profile-counter-block">
+                <div class="count">{{ user_profile.xp|default:"150" }}</div>
+                <p>XP Collected</p>
+            </div>
+            <div class="profile-counter-block">
+                <div class="count">{{ user_profile.competitions_won|default:"850" }}</div>
+                <p>Competitions Won</p>
+            </div>
+            <div class="profile-counter-block">
+                <div class="count">{{ user_profile.competitions_participated|default:"190" }}</div>
+                <p>Competitions Participated</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endif %}
+
+{% endblock %}
