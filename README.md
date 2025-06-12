@@ -1,7 +1,7 @@
 
 # SkillSaga: Quest, Challenge, and Competition Platform
 
-SkillSaga is a comprehensive web application designed to gamify learning and achievement through quests, challenges, and competitions. Users can create and complete quests, participate in challenges, earn XP, level up, and compete in time-bound competitions. The platform is built with Django and features robust user profile management, interactive UI elements, real-time feedback, and a focus on a seamless, engaging user experience.
+SkillSaga is a comprehensive web application designed to gamify learning and achievement through quests, challenges, and competitions. Users can create and complete quests, participate in challenges, earn XP, level up, and compete in time-bound competitions. The platform is built with Django and features robust user profile management, interactive UI elements, real-time feedback, and a focus on a seamless, engaging user experience!
 
 ---
 
