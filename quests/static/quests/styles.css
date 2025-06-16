@@ -504,7 +504,7 @@ body::after {
   background: rgba(255,255,255,0.13);
   border-radius: 14px;
   padding: 1.2rem 2.2rem;
-  max-width: 480px;
+  max-width: 1000px;
   width: 100%;
   box-shadow: 0 4px 18px rgba(0,0,0,0.13);
   border: 1.5px solid #ffd74044;
