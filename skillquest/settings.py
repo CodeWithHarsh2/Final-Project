@@ -7,7 +7,8 @@ SECRET_KEY = 'replace-this-with-your-own-secret-key'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS  = ['192.168.1.9', 'localhost', '127.0.0.1']  # Replace with your actual IP
+
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 INSTALLED_APPS = [
