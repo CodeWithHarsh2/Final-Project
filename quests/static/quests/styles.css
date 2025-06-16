@@ -894,7 +894,7 @@ ol {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none; /* Keep your background as is */
+  background: none;
 }
 
 .register-box {
@@ -1479,7 +1479,7 @@ button#share-btn:hover .container {
   button#share-btn .container {
     display: none !important; /* Hide text/icons if needed for space */
   }
-  /* Optional: Show only an icon for share on mobile */
+  
   button#share-btn::before {
     content: "🔗";
     font-size: 20px;
@@ -1499,7 +1499,7 @@ button#share-btn:hover .container {
     font-size: 0.7rem;
     margin-top: 0.5px;
     margin-right: 10px;
-    background: rgba(30,30,38,0.94); /* Optional: for readability */
+    background: rgba(30,30,38,0.94); 
     padding: 4px 6px;
     border-radius: 8px;
     z-index: 1101;

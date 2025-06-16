@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'quests',  # Register your app here
+    'quests',  
     "guest_user",
     "bootstrap_datepicker_plus",
     "django_flatpickr",

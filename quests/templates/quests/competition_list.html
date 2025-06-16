@@ -37,7 +37,7 @@
 document.querySelectorAll('.join-btn').forEach(function(btn) {
     btn.addEventListener('click', function(event) {
         event.preventDefault();
-        // Prevent double-click
+        
         if (btn.classList.contains('joined')) return;
         const competitionId = btn.getAttribute('data-competition-id');
         fetch(`/competitions/join/${competitionId}/`, {
@@ -56,7 +56,7 @@ document.querySelectorAll('.join-btn').forEach(function(btn) {
                 btn.style.background = "#aaa";
                 btn.style.color = "#fff";
                 btn.style.cursor = "not-allowed";
-                btn.href = "#"; // Prevent further navigation
+                btn.href = "#"; 
             }
         });
     });

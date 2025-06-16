@@ -41,7 +41,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.complete-btn').forEach(function(btn) {
         btn.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent form submission/reload!
+            event.preventDefault(); 
             const form = btn.closest('form');
             const challengeId = form.dataset.id;
             const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;

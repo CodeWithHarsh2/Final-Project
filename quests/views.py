@@ -66,7 +66,6 @@ def quest_detail(request, quest_id):
     return render(request, 'quests/quest_detail.html', {
         'quest': quest,
         'challenges': challenges,
-        # ...other context...
     })
 
 def leaderboard(request):
@@ -92,7 +91,7 @@ def complete_challenge(request, challenge_id):
             level_ups = (xp_after // 100) - (xp_before // 100)
             if level_ups > 0:
                 user_profile.level += level_ups
-            user_profile.xp = xp_after  # XP is NOT reset!
+            user_profile.xp = xp_after  
             user_profile.save()
 
             return JsonResponse({
